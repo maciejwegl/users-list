@@ -27,7 +27,6 @@ const UsersList =()=> {
     const setUser = (e) => {
         e.preventDefault();
         setUsers(users.concat({...formData, id: Date.now()}));
-        filterUsersByType('all')
     }
     
 
@@ -46,7 +45,7 @@ const UsersList =()=> {
 
 
 
-
+{/* <select name="userType" defaultValue={'Select User Type'} id="userType" onChange={getFormData} value={formData.userType}> */}
 
     return (
         <div className="usersList">
@@ -57,8 +56,8 @@ const UsersList =()=> {
                 <label htmlFor="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email" onChange={getFormData} value={formData.email} />
                 <label htmlFor='userType'>User Type</label>
-                <select name="userType" id="userType" onChange={getFormData} value={formData.userType}>
-                    <option value="" selected disabled hidden>Select User Type</option>
+                <select name="userType" defaultValue={'Select User Type'} id="userType" onChange={getFormData}>
+                    <option value="Select User Type" disabled>Select User Type</option>
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
