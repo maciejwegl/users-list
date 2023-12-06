@@ -43,10 +43,6 @@ const UsersList =()=> {
     };
 
 
-
-
-{/* <select name="userType" defaultValue={'Select User Type'} id="userType" onChange={getFormData} value={formData.userType}> */}
-
     return (
         <div className="usersList">
             
