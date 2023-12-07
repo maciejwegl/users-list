@@ -2,7 +2,7 @@
     width: 50%;
     min-height: 40vh;
     margin: 30px auto;
-    background-color: darkgoldenrod;
+    background-color:#fdb44b;
     padding: 10px;
     
 }
@@ -67,6 +67,8 @@
     text-align: left;
     transition: 0.3s;
     border: 1px solid #282c34;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .userItem:hover {

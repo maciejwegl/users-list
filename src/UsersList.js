@@ -2,58 +2,47 @@ import { useState } from "react";
 import "./UsersList.css";
 
 const UsersList =()=> {
-
-    const [formData, setFormData] = useState({
-        userName: '',
-        email: '',
-        userType: ''
-    });
     
     const [users, setUsers] = useState([]);
-
-    const [filteredUsers, setFilteredUsers] = useState(users);
-
-    const [selectedType, setSelectedType] = useState("all");
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [userTypeFilter, setUserTypeFilter] = useState('');
 
 
-    const getFormData = (e) => {
-        const target = e.target;
-        const name = target.name;
-        setFormData((prevData)=>{
-            return { ...prevData, [name]: target.value }
-        });
-    };
-
-    const setUser = (e) => {
+    const handleSave = (e) => {
         e.preventDefault();
-        setUsers(users.concat({...formData, id: Date.now()}));
+        const userName = e.target.elements.userName.value;
+        const email = e.target.elements.email.value;
+        const userType = e.target.elements.userType.value;
+        const id = Date.now();
+
+        setUsers([...users, {userName, email, userType, id}]);
     }
-    
 
 
-    const filterUsersByType = (userType) => {
-        if (userType === 'all') {
-            setFilteredUsers(users);
-        }
-        else {
-            const filtered = users.filter((user)=> user.userType === userType);
-            setFilteredUsers(filtered);
-        }
-        setSelectedType(userType);
+    const handleFilter = (userType) => {
+        const filtered = users.filter((user) => user.userType === userType);
+        setFilteredUsers(filtered);
+        setUserTypeFilter(userType);
     };
 
+
+    const removeUser = (id) => {
+        const filteredById = users.filter(user => user.id !== id);
+        setUsers(filteredById);
+        setFilteredUsers(filteredById);
+    }
 
     return (
         <div className="usersList">
             
-            <form onSubmit={setUser}>
+            <form onSubmit={handleSave}>
                 <label htmlFor="userName">User Name</label>
-                <input type="text" id="userName" name="userName" placeholder="User Name" onChange={getFormData} value={formData.userName}/>
+                <input type="text" id="userName" name="userName" placeholder="User Name" />
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email" onChange={getFormData} value={formData.email} />
+                <input type="email" id="email" name="email" placeholder="Email"  />
                 <label htmlFor='userType'>User Type</label>
-                <select name="userType" defaultValue={'Select User Type'} id="userType" onChange={getFormData}>
-                    <option value="Select User Type" disabled>Select User Type</option>
+                <select name="userType" defaultValue={'Select User Type'} id="userType" >
+                    <option value="Select User Type" hidden disabled>Select User Type</option>
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
@@ -62,14 +51,20 @@ const UsersList =()=> {
 
             
             <div className="btnPanel">
-                <button className={selectedType ==='admin' ? 'active' : ''} onClick={()=>filterUsersByType('admin')} >Show Admins</button>
-                <button className={selectedType ==='user' ? 'active' : '' } onClick={()=>filterUsersByType('user')}>Show Users</button>
-                <button className={selectedType ==='all' ? 'active' : '' } onClick={()=>filterUsersByType('all')}>Show All</button>
+                <button onClick={()=>handleFilter('admin')} >Show Admins</button>
+                <button onClick={()=>handleFilter('user')}>Show Users</button>
+                <button onClick={()=>handleFilter('')}>Show All</button>
             </div>
 
             <div className="list">
-                {filteredUsers.map((user)=> {
-                    return <div className="userItem" key={user.id}>
+                {userTypeFilter ? filteredUsers.map((user, id)=> {
+                    return <div className="userItem" key={user.id} onClick={()=>removeUser(user.id)}>
+                    <p>{user.userName}</p>
+                    <p>{user.email}</p>
+                    <p>{user.userType}</p>
+                    </div>
+                }) : users.map((user, id) => {
+                    return <div className="userItem" key={user.id} onClick={()=>removeUser(user.id)}>
                     <p>{user.userName}</p>
                     <p>{user.email}</p>
                     <p>{user.userType}</p>
